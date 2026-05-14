@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/aspire/">
+    <Project Path="aspire/WarehouseSimulator.AppHost/WarehouseSimulator.AppHost.csproj" />
+    <Project Path="aspire/WarehouseSimulator.ServiceDefaults/WarehouseSimulator.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/WarehouseSimulator.Api/WarehouseSimulator.Api.csproj" />
+    <Project Path="src/WarehouseSimulator.Web/WarehouseSimulator.Web.csproj" />
+  </Folder>
+</Solution>
