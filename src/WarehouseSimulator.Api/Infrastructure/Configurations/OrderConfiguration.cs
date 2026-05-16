@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WarehouseSimulator.Api.Domain.Orders;
 
-namespace WarehouseSimulator.Api.Configurations;
+namespace WarehouseSimulator.Api.Infrastructure.Configurations;
 
 public class OrderConfiguration : IEntityTypeConfiguration<Order>
 {
