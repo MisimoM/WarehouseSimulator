@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using WarehouseSimulator.Api.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,5 +18,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await db.Database.MigrateAsync();
+}
 
 app.Run();
