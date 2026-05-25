@@ -21,7 +21,6 @@ public class Notification
     {
         return new Notification
         {
-            Id = Guid.NewGuid(),
             Message = message,
             Type = type,
             Source = source,
