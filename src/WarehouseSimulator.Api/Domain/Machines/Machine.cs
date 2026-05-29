@@ -13,6 +13,16 @@ public class Machine
 
     private Machine() { }
 
+    public static Machine Create(MachineType type)
+    {
+        return new Machine
+        {
+            Type = type,
+            Status = MachineStatus.Running,
+            TotalBreakdowns = 0
+        };
+    }
+
     public void Break(DateTime simulatedTime)
     {
         if (Status is not MachineStatus.Running)

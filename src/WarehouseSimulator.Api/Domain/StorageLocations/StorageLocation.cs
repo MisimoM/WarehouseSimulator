@@ -16,6 +16,16 @@ public class StorageLocation
 
     private StorageLocation() { }
 
+    public static StorageLocation Create(string row, int column)
+    {
+        return new StorageLocation
+        {
+            Row = row,
+            Column = column,
+            Status = StorageLocationStatus.Empty
+        };
+    }
+
     public void Reserve()
     {
         Status = StorageLocationStatus.Reserved;
