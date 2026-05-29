@@ -1,11 +1,14 @@
 using Microsoft.EntityFrameworkCore;
+using WarehouseSimulator.Api.Domain.Shared.Events;
 using WarehouseSimulator.Api.Infrastructure;
-using WarehouseSimulator.Api.Infrastructure.Persistence.Seed;
+using WarehouseSimulator.Api.Infrastructure.Events;
+using WarehouseSimulator.Api.Infrastructure.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 builder.AddNpgsqlDbContext<ApplicationDbContext>("warehouse-db");
+builder.Services.AddSingleton<IEventBus, EventBus>();
 
 builder.Services.AddOpenApi();
 
