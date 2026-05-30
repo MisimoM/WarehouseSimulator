@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WarehouseSimulator.Api.Domain.Machines;
 
-namespace WarehouseSimulator.Api.Infrastructure.Configurations;
+namespace WarehouseSimulator.Api.Infrastructure.Persistence.Configurations;
 
 public class MachineConfiguration : IEntityTypeConfiguration<Machine>
 {

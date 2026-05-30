@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WarehouseSimulator.Api.Domain.StorageLocations;
 
-namespace WarehouseSimulator.Api.Infrastructure.Configurations;
+namespace WarehouseSimulator.Api.Infrastructure.Persistence.Configurations;
 
 public class StorageLocationConfiguration : IEntityTypeConfiguration<StorageLocation>
 {
