@@ -5,7 +5,7 @@ using WarehouseSimulator.Api.Domain.Orders;
 using WarehouseSimulator.Api.Domain.Products;
 using WarehouseSimulator.Api.Domain.StorageLocations;
 
-namespace WarehouseSimulator.Api.Infrastructure;
+namespace WarehouseSimulator.Api.Infrastructure.Persistence;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {

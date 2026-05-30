@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WarehouseSimulator.Api.Domain.Shared.Events;
-using WarehouseSimulator.Api.Infrastructure;
 using WarehouseSimulator.Api.Infrastructure.Events;
+using WarehouseSimulator.Api.Infrastructure.Persistence;
 using WarehouseSimulator.Api.Infrastructure.Seed;
 
 var builder = WebApplication.CreateBuilder(args);

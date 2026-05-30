@@ -23,4 +23,8 @@
     <ProjectReference Include="..\..\aspire\WarehouseSimulator.ServiceDefaults\WarehouseSimulator.ServiceDefaults.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Infrastructure\Persistence\Migrations\" />
+  </ItemGroup>
+
 </Project>
