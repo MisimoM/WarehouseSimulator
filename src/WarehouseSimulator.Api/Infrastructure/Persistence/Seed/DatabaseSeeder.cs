@@ -1,8 +1,7 @@
 ﻿using WarehouseSimulator.Api.Domain.Machines;
 using WarehouseSimulator.Api.Domain.StorageLocations;
-using WarehouseSimulator.Api.Infrastructure.Persistence;
 
-namespace WarehouseSimulator.Api.Infrastructure.Seed;
+namespace WarehouseSimulator.Api.Infrastructure.Persistence.Seed;
 
 public static class DatabaseSeeder
 {
