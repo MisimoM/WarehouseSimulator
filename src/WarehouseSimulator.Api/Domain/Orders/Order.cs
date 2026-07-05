@@ -11,6 +11,8 @@ public class Order
     public DateTime CreatedAt { get; private set; }
     public DateTime SimulatedCreatedAt { get; private set; }
 
+    public string DisplayNumber => $"#{OrderNumber:D4}";
+
     private Order() { }
 
     public static Order Create(Priority priority, DateTime simulatedTime)
@@ -23,6 +25,11 @@ public class Order
             CreatedAt = DateTime.UtcNow,
             SimulatedCreatedAt = simulatedTime
         };
+    }
+
+    public void UpdateStatus(OrderStatus status)
+    {
+        Status = status;
     }
 }
 

@@ -3,4 +3,5 @@
 public interface ISimulationClock
 {
     DateTime GetCurrentSimulatedTime();
+    int GetRealMilliseconds(int simulatedHours);
 }
