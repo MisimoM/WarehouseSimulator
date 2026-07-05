@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WarehouseSimulator.Api.Domain.Shared.Events;
+using WarehouseSimulator.Api.Infrastructure.Belt;
 using WarehouseSimulator.Api.Infrastructure.Events;
 using WarehouseSimulator.Api.Infrastructure.Persistence;
 using WarehouseSimulator.Api.Infrastructure.Persistence.Seed;
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 builder.AddNpgsqlDbContext<ApplicationDbContext>("warehouse-db");
 builder.Services.AddSingleton<IEventBus, EventBus>();
+builder.Services.AddSingleton<BeltChannel>();
 builder.Services.AddSignalR();
 
 
