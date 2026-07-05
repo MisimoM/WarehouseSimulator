@@ -20,14 +20,16 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>();
 
 // Services
 builder.Services.AddSingleton<IEventBus, EventBus>();
-builder.Services.AddSingleton<BeltChannel>();
 builder.Services.AddSingleton<ISimulationClock, SimulationClock>();
+builder.Services.AddSingleton<BeltChannel>();
+builder.Services.AddScoped<BeltRestoreService>();
 
 // SignalR
 builder.Services.AddSignalR();
 
 // Workers
 builder.Services.AddHostedService<OrderWorker>();
+builder.Services.AddHostedService<ProductionWorker>();
 
 // OpenApi
 builder.Services.AddOpenApi();
@@ -53,6 +55,9 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     await db.Database.MigrateAsync();
     await DatabaseSeeder.SeedAsync(db);
+
+    var beltRestore = scope.ServiceProvider.GetRequiredService<BeltRestoreService>();
+    await beltRestore.RestoreAsync();
 }
 
 app.Run();

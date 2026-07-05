@@ -18,13 +18,13 @@ public class Product
 
     private Product() { }
 
-    public static Product Create(Guid orderId, Priority priority, DateTime simulatedTime)
+    public static Product Create(Order order, DateTime simulatedTime)
     {
         return new Product
         {
             Id = Guid.NewGuid(),
-            OrderId = orderId,
-            Priority = priority,
+            OrderId = order.Id,
+            Priority = order.Priority,
             Status = ProductStatus.OnBelt,
             ProducedAt = DateTime.UtcNow,
             SimulatedProducedAt = simulatedTime
