@@ -14,4 +14,9 @@ public class SimulationClock(int secondsPerHour = 6) : ISimulationClock
         var simulatedHours = realElapsed.TotalSeconds / _secondsPerHour;
         return _simulatedStartTime.AddHours(simulatedHours);
     }
+
+    public int GetRealMilliseconds(int simulatedHours)
+    {
+        return simulatedHours * _secondsPerHour * 1000;
+    }
 }
