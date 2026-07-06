@@ -30,6 +30,19 @@ builder.Services.AddSignalR();
 // Workers
 builder.Services.AddHostedService<OrderWorker>();
 builder.Services.AddHostedService<ProductionWorker>();
+builder.Services.AddHostedService<StorageWorker>();
+
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("https://localhost:7286")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
 
 // OpenApi
 builder.Services.AddOpenApi();
@@ -59,5 +72,8 @@ using (var scope = app.Services.CreateScope())
     var beltRestore = scope.ServiceProvider.GetRequiredService<BeltRestoreService>();
     await beltRestore.RestoreAsync();
 }
+
+// Cors
+app.UseCors();
 
 app.Run();

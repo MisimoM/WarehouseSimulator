@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\aspire\WarehouseSimulator.ServiceDefaults\WarehouseSimulator.ServiceDefaults.csproj" />
   </ItemGroup>
 

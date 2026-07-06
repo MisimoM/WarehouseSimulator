@@ -1,7 +1,32 @@
 ﻿@page "/"
+@rendermode InteractiveServer
 
-<PageTitle>Home</PageTitle>
+@using Microsoft.AspNetCore.SignalR.Client
+@using WarehouseSimulator.Web.SignalR.Messages
 
-<h1>Hello, world!</h1>
+<h3>SignalR Test</h3>
 
-Welcome to your new app.
+@foreach (var update in updates)
+{
+    <p>@update</p>
+}
+
+@code {
+    private List<string> updates = new();
+    private HubConnection? _hubConnection;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl("https://localhost:7027/warehouse-hub")
+            .Build();
+
+        _hubConnection.On<StorageLocationUpdate>("StorageLocationUpdated", async (update) =>
+        {
+            updates.Add($"{DateTime.Now} - {update.LocationCode} - {update.Status}");
+            await InvokeAsync(StateHasChanged);
+        });
+
+        await _hubConnection.StartAsync();
+    }
+}
