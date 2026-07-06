@@ -30,4 +30,22 @@ public class Product
             SimulatedProducedAt = simulatedTime
         };
     }
+
+    public void MarkAsBeingStored()
+    {
+        if (Status is not ProductStatus.OnBelt)
+            throw new InvalidOperationException($"Product must be OnBelt to be stored, current status: {Status}");
+
+        Status = ProductStatus.BeingStored;
+    }
+
+    public void MarkAsInStorage(DateTime simulatedTime)
+    {
+        if (Status is not ProductStatus.BeingStored)
+            throw new InvalidOperationException($"Product must be BeingStored to be stored, current status: {Status}");
+
+        Status = ProductStatus.InStorage;
+        StoredAt = DateTime.UtcNow;
+        SimulatedStoredAt = simulatedTime;
+    }
 }

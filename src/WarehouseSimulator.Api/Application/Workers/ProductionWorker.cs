@@ -26,7 +26,7 @@ public class ProductionWorker(
             if (machine.Status != MachineStatus.Running)
             {
                 logger.LogWarning("Production machine is not running, waiting...");
-                await Task.Delay(simulationClock.GetRealMilliseconds(1), cancellationToken);
+                await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1), cancellationToken);
                 continue;
             }
 
@@ -64,7 +64,7 @@ public class ProductionWorker(
 
             logger.LogInformation("Product placed on belt for order {OrderNumber}", order.DisplayNumber);
 
-            await Task.Delay(simulationClock.GetRealMilliseconds(1), cancellationToken);
+            await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1), cancellationToken);
         }
     }
 }

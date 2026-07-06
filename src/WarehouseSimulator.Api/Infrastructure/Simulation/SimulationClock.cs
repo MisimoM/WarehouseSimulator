@@ -15,8 +15,13 @@ public class SimulationClock(int secondsPerHour = 6) : ISimulationClock
         return _simulatedStartTime.AddHours(simulatedHours);
     }
 
-    public int GetRealMilliseconds(int simulatedHours)
+    public int GetRealMillisecondsFromHours(int simulatedHours)
     {
         return simulatedHours * _secondsPerHour * 1000;
+    }
+
+    public int GetRealMillisecondsFromMinutes(int simulatedMinutes)
+    {
+        return (int)(simulatedMinutes * (_secondsPerHour / 60.0) * 1000);
     }
 }
