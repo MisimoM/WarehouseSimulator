@@ -8,12 +8,8 @@ var postgres = builder.AddPostgres("postgres")
 
 var warehouseDatabase = postgres.AddDatabase("warehouse-db");
 
-var warehouseApi = builder.AddProject<Projects.WarehouseSimulator_Api>("warehousesimulator-api")
+builder.AddProject<Projects.WarehouseSimulator_Web>("warehousesimulator-web")
     .WithReference(warehouseDatabase)
     .WaitFor(warehouseDatabase);
-
-builder.AddProject<Projects.WarehouseSimulator_Web>("warehousesimulator-web")
-    .WithReference(warehouseApi)
-    .WaitFor(warehouseApi);
 
 builder.Build().Run();
