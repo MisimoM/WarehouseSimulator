@@ -1,12 +1,18 @@
+using WarehouseSimulator.Api.Application;
+using WarehouseSimulator.Api.Application.Services.Machines;
+using WarehouseSimulator.Api.Infrastructure;
 using WarehouseSimulator.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
+builder.Services.AddApplication();
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddScoped<IMachineService, MachineService>();
 
 var app = builder.Build();
 

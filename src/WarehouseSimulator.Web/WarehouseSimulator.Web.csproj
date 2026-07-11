@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\aspire\WarehouseSimulator.ServiceDefaults\WarehouseSimulator.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\WarehouseSimulator.Api\WarehouseSimulator.Api.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,51 @@
+﻿@using WarehouseSimulator.Api.Application.Services.Machines
+@using WarehouseSimulator.Api.Domain.Machines
+@inject IMachineService MachineService
+
+<div class="machine-card @GetStatusClass()">
+    <div class="machine-header">
+        <span class="machine-icon">⚙️</span>
+        <h3>@GetMachineName()</h3>
+    </div>
+
+    <div class="machine-status">
+        <span class="status-indicator"></span>
+        <span>@Machine.Status</span>
+    </div>
+
+    <div class="machine-stats">
+        <span>Haverier: @Machine.TotalBreakdowns</span>
+    </div>
+
+    @if (Machine.Status == MachineStatus.Broken)
+    {
+        <button class="repair-btn" @onclick="OnRepairClicked">
+            🔧 Laga maskin
+        </button>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public Machine Machine { get; set; } = null!;
+
+    private async Task OnRepairClicked()
+    {
+        await MachineService.RepairMachineAsync(Machine.Id);
+    }
+
+    private string GetStatusClass() => Machine.Status switch
+    {
+        MachineStatus.Running => "status-running",
+        MachineStatus.Broken => "status-broken",
+        MachineStatus.Repairing => "status-repairing",
+        _ => ""
+    };
+
+    private string GetMachineName() => Machine.Type switch
+    {
+        MachineType.Production => "Produktionsmaskin",
+        MachineType.Storage => "Inlagringsmaskin",
+        _ => "Okänd maskin"
+    };
+}

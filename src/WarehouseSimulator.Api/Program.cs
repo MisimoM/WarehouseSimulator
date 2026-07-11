@@ -1,12 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using WarehouseSimulator.Api.Application.Workers;
-using WarehouseSimulator.Api.Domain.Shared;
-using WarehouseSimulator.Api.Domain.Shared.Events;
+using WarehouseSimulator.Api.Application;
+using WarehouseSimulator.Api.Infrastructure;
 using WarehouseSimulator.Api.Infrastructure.Belt;
-using WarehouseSimulator.Api.Infrastructure.Events;
 using WarehouseSimulator.Api.Infrastructure.Persistence;
 using WarehouseSimulator.Api.Infrastructure.Persistence.Seed;
-using WarehouseSimulator.Api.Infrastructure.Simulation;
 using WarehouseSimulator.Api.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,23 +11,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Aspire
 builder.AddServiceDefaults();
 
-// Database
-builder.AddNpgsqlDbContext<ApplicationDbContext>("warehouse-db");
-builder.Services.AddDbContextFactory<ApplicationDbContext>();
-
-// Services
-builder.Services.AddSingleton<IEventBus, EventBus>();
-builder.Services.AddSingleton<ISimulationClock, SimulationClock>();
-builder.Services.AddSingleton<BeltChannel>();
-builder.Services.AddScoped<BeltRestoreService>();
+// Infrastructure services
+builder.AddInfrastructure();
 
 // SignalR
 builder.Services.AddSignalR();
 
-// Workers
-builder.Services.AddHostedService<OrderWorker>();
-builder.Services.AddHostedService<ProductionWorker>();
-builder.Services.AddHostedService<StorageWorker>();
+// Application services and workers
+builder.Services.AddApplication();
+builder.Services.AddWorkers();
 
 // CORS
 builder.Services.AddCors(options =>

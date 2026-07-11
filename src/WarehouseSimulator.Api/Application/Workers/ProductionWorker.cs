@@ -65,6 +65,14 @@ public class ProductionWorker(
             logger.LogInformation("Product placed on belt for order {OrderNumber}", order.DisplayNumber);
 
             await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1), cancellationToken);
+
+            if (SimulationRandomizer.ShouldBreakDown())
+            {
+                var breakdownSimulatedTime = simulationClock.GetCurrentSimulatedTime();
+                machine.Break(breakdownSimulatedTime);
+                await context.SaveChangesAsync(cancellationToken);
+                logger.LogWarning("Production machine broke down!");
+            }
         }
     }
 }
