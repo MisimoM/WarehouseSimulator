@@ -1,0 +1,66 @@
+﻿.machine-card {
+    background-color: var(--color-sidebar);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    border: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.machine-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.machine-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.machine-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.status-running .status-indicator {
+    background-color: var(--color-success);
+}
+
+.status-broken .status-indicator {
+    background-color: var(--color-error);
+}
+
+.status-repairing .status-indicator {
+    background-color: var(--color-warning);
+}
+
+.machine-stats {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+.repair-btn {
+    background-color: var(--color-accent);
+    color: #ffffff;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.repair-btn:hover {
+    opacity: 0.9;
+}

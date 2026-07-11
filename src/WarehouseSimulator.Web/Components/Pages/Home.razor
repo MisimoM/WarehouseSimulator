@@ -1,2 +1,29 @@
-﻿@page "/"
-@rendermode InteractiveServer
+﻿@using WarehouseSimulator.Api.Application.Services.Machines
+@using WarehouseSimulator.Api.Domain.Machines
+@using WarehouseSimulator.Web.Components.Machines
+
+@page "/"
+@inject IMachineService MachineService
+
+<div class="dashboard">
+    <div class="dashboard-top">
+        <div class="machines-section">
+            <h2>Maskiner</h2>
+            <div class="machine-cards">
+                @foreach (var machine in machines)
+                {
+                    <MachineCard Machine="@machine" />
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<Machine> machines = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        machines = await MachineService.GetMachinesAsync();
+    }
+}
