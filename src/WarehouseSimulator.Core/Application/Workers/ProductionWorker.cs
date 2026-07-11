@@ -1,0 +1,81 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using WarehouseSimulator.Core.Application.Workers;
+using WarehouseSimulator.Core.Domain.Machines;
+using WarehouseSimulator.Core.Domain.Orders;
+using WarehouseSimulator.Core.Domain.Products;
+using WarehouseSimulator.Core.Domain.Shared;
+using WarehouseSimulator.Core.Infrastructure.Belt;
+using WarehouseSimulator.Core.Infrastructure.Persistence;
+
+namespace WarehouseSimulator.Api.Application.Workers;
+
+public class ProductionWorker(
+    IDbContextFactory<ApplicationDbContext> dbContextFactory,
+    BeltChannel belt,
+    ISimulationClock simulationClock,
+    ILogger<ProductionWorker> logger) : BackgroundService
+{
+    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+    {
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            await using var context = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+
+            var machine = await context.Machines
+                .FirstAsync(m => m.Type == MachineType.Production, cancellationToken);
+
+            if (machine.Status != MachineStatus.Running)
+            {
+                logger.LogWarning("Production machine is not running, waiting...");
+                await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1), cancellationToken);
+                continue;
+            }
+
+            var order = await context.Orders
+                .Where(o => o.Status == OrderStatus.Pending)
+                .OrderByDescending(o => o.Priority == Priority.Express)
+                .ThenBy(o => o.CreatedAt)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (order is null)
+            {
+                logger.LogInformation("No pending orders, waiting...");
+                await Task.Delay(1000, cancellationToken);
+                continue;
+            }
+
+            if (belt.Count >= 10)
+            {
+                logger.LogInformation("Belt is full, waiting...");
+                await Task.Delay(1000, cancellationToken);
+                continue;
+            }
+
+            var simulatedTime = simulationClock.GetCurrentSimulatedTime();
+            var product = Product.Create(order, simulatedTime);
+
+            order.UpdateStatus(OrderStatus.InProduction);
+
+            context.Products.Add(product);
+            await context.SaveChangesAsync(cancellationToken);
+
+            logger.LogInformation("Product created for order {OrderNumber}", order.DisplayNumber);
+
+            await belt.Writer.WriteAsync(product, cancellationToken);
+
+            logger.LogInformation("Product placed on belt for order {OrderNumber}", order.DisplayNumber);
+
+            await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1), cancellationToken);
+
+            if (SimulationRandomizer.ShouldBreakDown())
+            {
+                var breakdownSimulatedTime = simulationClock.GetCurrentSimulatedTime();
+                machine.Break(breakdownSimulatedTime);
+                await context.SaveChangesAsync(cancellationToken);
+                logger.LogWarning("Production machine broke down!");
+            }
+        }
+    }
+}

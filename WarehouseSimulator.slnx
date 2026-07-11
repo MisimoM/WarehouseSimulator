@@ -4,7 +4,7 @@
     <Project Path="aspire/WarehouseSimulator.ServiceDefaults/WarehouseSimulator.ServiceDefaults.csproj" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="src/WarehouseSimulator.Api/WarehouseSimulator.Api.csproj" />
+    <Project Path="src/WarehouseSimulator.Core/WarehouseSimulator.Core.csproj" Id="6cbad28e-cb0f-490b-8f24-e6576bf41367" />
     <Project Path="src/WarehouseSimulator.Web/WarehouseSimulator.Web.csproj" />
   </Folder>
 </Solution>
