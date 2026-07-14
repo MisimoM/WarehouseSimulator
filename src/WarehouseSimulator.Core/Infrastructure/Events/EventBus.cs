@@ -17,7 +17,8 @@ public class EventBus : IEventBus
 
     public async Task PublishAsync<T>(T @event) where T : IDomainEvent
     {
-        var handlers = _serviceProvider.GetServices<IEventHandler<T>>();
+        using var scope = _serviceProvider.CreateScope();
+        var handlers = scope.ServiceProvider.GetServices<IEventHandler<T>>();
         
         if (!handlers.Any())
             return;

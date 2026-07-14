@@ -1,20 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using WarehouseSimulator.Core.Application.Workers;
 using WarehouseSimulator.Core.Domain.Machines;
+using WarehouseSimulator.Core.Domain.Machines.Events;
 using WarehouseSimulator.Core.Domain.Orders;
 using WarehouseSimulator.Core.Domain.Products;
 using WarehouseSimulator.Core.Domain.Shared;
+using WarehouseSimulator.Core.Domain.Shared.Events;
 using WarehouseSimulator.Core.Infrastructure.Belt;
 using WarehouseSimulator.Core.Infrastructure.Persistence;
 
-namespace WarehouseSimulator.Api.Application.Workers;
+namespace WarehouseSimulator.Core.Application.Workers;
 
 public class ProductionWorker(
     IDbContextFactory<ApplicationDbContext> dbContextFactory,
     BeltChannel belt,
     ISimulationClock simulationClock,
+    IEventBus eventBus,
     ILogger<ProductionWorker> logger) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
@@ -48,7 +50,7 @@ public class ProductionWorker(
 
             if (belt.Count >= 10)
             {
-                logger.LogInformation("Belt is full, waiting...");
+                logger.LogWarning("Belt is full, waiting...");
                 await Task.Delay(1000, cancellationToken);
                 continue;
             }
@@ -74,6 +76,13 @@ public class ProductionWorker(
                 var breakdownSimulatedTime = simulationClock.GetCurrentSimulatedTime();
                 machine.Break(breakdownSimulatedTime);
                 await context.SaveChangesAsync(cancellationToken);
+               
+                await eventBus.PublishAsync(new MachineBreakdownEvent(
+                    machine.Id,
+                    machine.Type,
+                    machine.TotalBreakdowns
+                ));
+                
                 logger.LogWarning("Production machine broke down!");
             }
         }

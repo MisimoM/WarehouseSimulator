@@ -14,6 +14,7 @@ builder.AddServiceDefaults();
 builder.AddInfrastructure();
 builder.Services.AddApplication();
 builder.Services.AddSignalR();
+builder.Services.AddScoped<WarehouseHubClient>();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
