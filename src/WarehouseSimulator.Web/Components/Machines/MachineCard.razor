@@ -27,7 +27,7 @@
 
 @code {
     [Parameter]
-    public Machine Machine { get; set; } = null!;
+    public MachineView Machine { get; set; } = null!;
 
     private async Task OnRepairClicked()
     {
@@ -44,8 +44,8 @@
 
     private string GetMachineName() => Machine.Type switch
     {
-        MachineType.Production => "Produktionsmaskin",
-        MachineType.Storage => "Inlagringsmaskin",
-        _ => "Okänd maskin"
+        MachineType.Production => "Production Machine",
+        MachineType.Storage => "Storage Machine",
+        _ => "Unknown machine"
     };
 }

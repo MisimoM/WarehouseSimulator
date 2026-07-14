@@ -1,9 +1,13 @@
 ﻿@using WarehouseSimulator.Core.Application.Services.Machines
 @using WarehouseSimulator.Core.Domain.Machines
+@using WarehouseSimulator.Core.SignalR
+@using WarehouseSimulator.Core.SignalR.Messages
 @using WarehouseSimulator.Web.Components.Machines
 
 @page "/"
 @inject IMachineService MachineService
+@inject WarehouseHubClient HubClient
+@rendermode InteractiveServer
 
 <div class="dashboard">
     <div class="dashboard-top">
@@ -20,10 +24,24 @@
 </div>
 
 @code {
-    private List<Machine> machines = new();
+    private List<MachineView> machines = new();
 
     protected override async Task OnInitializedAsync()
     {
         machines = await MachineService.GetMachinesAsync();
+
+        await HubClient.StartAsync();
+
+        HubClient.On<MachineStatusUpdate>("MachineStatusUpdated", async (update) =>
+        {
+            var machine = machines.FirstOrDefault(m => m.Id == update.MachineId);
+            if (machine is not null)
+            {
+                machine.Status = Enum.Parse<MachineStatus>(update.Status);
+                if (update.TotalBreakdowns.HasValue)
+                    machine.TotalBreakdowns = update.TotalBreakdowns.Value;
+            }
+            await InvokeAsync(StateHasChanged);
+        });
     }
 }
