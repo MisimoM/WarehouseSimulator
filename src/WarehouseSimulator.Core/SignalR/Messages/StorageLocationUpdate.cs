@@ -6,5 +6,5 @@ public record StorageLocationUpdate(
     int Column,
     string Status,
     Guid? ProductId,
-    int? OrderNumber
+    string? OrderNumber
 );

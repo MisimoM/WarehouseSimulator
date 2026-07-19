@@ -8,9 +8,10 @@ public class StorageLocation
     public Guid? ProductId { get; private set; }
     public string Row { get; private set; } = null!;
     public int Column { get; private set; }
-    public string LocationCode => $"{Row}{Column}";
     public uint LocationVersion { get; private set; }
     public StorageLocationStatus Status { get; private set; }
+    
+    public string LocationCode => $"{Row}{Column}";
 
     public Product? Product { get; private set; }
 

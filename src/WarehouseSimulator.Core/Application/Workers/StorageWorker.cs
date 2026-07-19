@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WarehouseSimulator.Core.Domain.Machines;
@@ -11,7 +10,6 @@ using WarehouseSimulator.Core.Domain.StorageLocations;
 using WarehouseSimulator.Core.Domain.StorageLocations.Events;
 using WarehouseSimulator.Core.Infrastructure.Belt;
 using WarehouseSimulator.Core.Infrastructure.Persistence;
-using WarehouseSimulator.Core.SignalR.Messages;
 
 namespace WarehouseSimulator.Core.Application.Workers;
 
@@ -51,7 +49,7 @@ public class StorageWorker(
             if (location is null)
             {
                 logger.LogWarning("No empty storage locations available");
-                await Task.Delay(1000, cancellationToken);
+                await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1), cancellationToken);
                 continue;
             }
 
@@ -77,7 +75,7 @@ public class StorageWorker(
                 location.Column,
                 location.Status,
                 product.Id,
-                order.OrderNumber,
+                order.DisplayNumber,
                 simulationClock.GetCurrentSimulatedTime()
             ));
 

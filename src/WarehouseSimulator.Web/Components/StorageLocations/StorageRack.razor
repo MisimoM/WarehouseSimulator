@@ -18,7 +18,7 @@
                         @if (location.Status == "Occupied")
                         {
                             <div class="storage-box">
-                                <span>@location.DisplayNumber</span>
+                                <span>@location.OrderNumber</span>
                             </div>
                         }
                     </div>
@@ -34,8 +34,6 @@
     protected override async Task OnInitializedAsync()
     {
         locations = await StorageLocationService.GetStorageLocationsAsync();
-
-        await HubClient.StartAsync();
 
         HubClient.On<StorageLocationUpdate>("StorageLocationUpdated", async (update) =>
         {

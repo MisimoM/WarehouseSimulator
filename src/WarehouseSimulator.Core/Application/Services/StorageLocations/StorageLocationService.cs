@@ -3,7 +3,7 @@ using WarehouseSimulator.Core.Infrastructure.Persistence;
 
 namespace WarehouseSimulator.Core.Application.Services.StorageLocations;
 
-public class StorageLocationService( IDbContextFactory<ApplicationDbContext> dbContextFactory) : IStorageLocationService
+public class StorageLocationService(IDbContextFactory<ApplicationDbContext> dbContextFactory) : IStorageLocationService
 {
     public async Task<List<StorageLocationView>> GetStorageLocationsAsync()
     {
@@ -15,7 +15,7 @@ public class StorageLocationService( IDbContextFactory<ApplicationDbContext> dbC
                 Row = s.Row,
                 Column = s.Column,
                 Status = s.Status.ToString(),
-                OrderNumber = s.Product != null ? s.Product.Order.OrderNumber : null
+                OrderNumber = s.Product != null ? s.Product.Order.DisplayNumber : null
             })
             .ToListAsync();
     }

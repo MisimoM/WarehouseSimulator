@@ -9,7 +9,7 @@ public class StorageLocationUpdatedEvent : IDomainEvent
     public int Column { get; }
     public StorageLocationStatus Status { get; }
     public Guid? ProductId { get; }
-    public int? OrderNumber { get; }
+    public string? OrderNumber { get; }
     public DateTime OccurredAt { get; }
     public DateTime SimulatedOccurredAt { get; }
 
@@ -19,7 +19,7 @@ public class StorageLocationUpdatedEvent : IDomainEvent
         int column,
         StorageLocationStatus status,
         Guid? productId,
-        int? orderNumber,
+        string? orderNumber,
         DateTime simulatedTime)
     {
         LocationId = locationId;
