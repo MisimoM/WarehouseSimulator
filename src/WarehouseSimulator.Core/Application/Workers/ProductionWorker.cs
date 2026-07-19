@@ -63,11 +63,11 @@ public class ProductionWorker(
             context.Products.Add(product);
             await context.SaveChangesAsync(cancellationToken);
 
-            logger.LogInformation("Product created for order {OrderNumber}", order.DisplayNumber);
+            logger.LogInformation("Product created for order {OrderNumber}", order.OrderNumber);
 
             await belt.Writer.WriteAsync(product, cancellationToken);
 
-            logger.LogInformation("Product placed on belt for order {OrderNumber}", order.DisplayNumber);
+            logger.LogInformation("Product placed on belt for order {OrderNumber}", order.OrderNumber);
 
             await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1), cancellationToken);
 

@@ -31,7 +31,7 @@ public class OrderWorker(
             await context.SaveChangesAsync(cancellationToken);
 
             logger.LogInformation("Order {OrderNumber} created with priority {Priority}",
-                order.DisplayNumber, order.Priority);
+                order.OrderNumber, order.Priority);
 
             await Task.Delay(simulationClock.GetRealMillisecondsFromHours(2), cancellationToken);
         }

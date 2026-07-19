@@ -8,6 +8,7 @@ using WarehouseSimulator.Core.Domain.Orders;
 using WarehouseSimulator.Core.Domain.Shared;
 using WarehouseSimulator.Core.Domain.Shared.Events;
 using WarehouseSimulator.Core.Domain.StorageLocations;
+using WarehouseSimulator.Core.Domain.StorageLocations.Events;
 using WarehouseSimulator.Core.Infrastructure.Belt;
 using WarehouseSimulator.Core.Infrastructure.Persistence;
 using WarehouseSimulator.Core.SignalR.Messages;
@@ -61,14 +62,24 @@ public class StorageWorker(
             await Task.Delay(simulationClock.GetRealMillisecondsFromMinutes(10), cancellationToken);
 
             var simulatedTime = simulationClock.GetCurrentSimulatedTime();
+            location.Occupy(product.Id);
             product.MarkAsInStorage(simulatedTime);
             order.UpdateStatus(OrderStatus.InStorage);
-            location.Occupy(product.Id);
 
             await context.SaveChangesAsync(cancellationToken);
 
             logger.LogInformation("Product {ProductId} stored at {LocationCode}",
                 product.Id, location.LocationCode);
+
+            await eventBus.PublishAsync(new StorageLocationUpdatedEvent(
+                location.Id,
+                location.Row,
+                location.Column,
+                location.Status,
+                product.Id,
+                order.OrderNumber,
+                simulationClock.GetCurrentSimulatedTime()
+            ));
 
             await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1), cancellationToken);
 

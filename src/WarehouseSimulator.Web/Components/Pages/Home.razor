@@ -3,6 +3,7 @@
 @using WarehouseSimulator.Core.SignalR
 @using WarehouseSimulator.Core.SignalR.Messages
 @using WarehouseSimulator.Web.Components.Machines
+@using WarehouseSimulator.Web.Components.StorageLocations
 
 @page "/"
 @inject IMachineService MachineService
@@ -19,6 +20,10 @@
                     <MachineCard Machine="@machine" />
                 }
             </div>
+        </div>
+        <div class="storage-section">
+            <h2>Pallställ</h2>
+            <StorageRack />
         </div>
     </div>
 </div>
