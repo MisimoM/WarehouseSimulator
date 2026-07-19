@@ -1,0 +1,65 @@
+﻿@using WarehouseSimulator.Core.Application.Services.StorageLocations
+@using WarehouseSimulator.Core.SignalR.Messages
+@using WarehouseSimulator.Core.SignalR
+
+@inject IStorageLocationService StorageLocationService
+@inject WarehouseHubClient HubClient
+@rendermode InteractiveServer
+
+<div class="storage-rack">
+    <div class="rack-grid">
+        @foreach (var row in GetRows())
+        {
+            <div class="rack-column">
+                @foreach (var location in GetLocationsForRow(row))
+                {
+                    <div class="rack-slot @GetSlotClass(location)">
+                        <span class="location-code">@location.LocationCode</span>
+                        @if (location.Status == "Occupied")
+                        {
+                            <div class="storage-box">
+                                <span>@location.DisplayNumber</span>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<StorageLocationView> locations = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        locations = await StorageLocationService.GetStorageLocationsAsync();
+
+        await HubClient.StartAsync();
+
+        HubClient.On<StorageLocationUpdate>("StorageLocationUpdated", async (update) =>
+        {
+            var location = locations.FirstOrDefault(l => l.Id == update.LocationId);
+            if (location is not null)
+            {
+                location.Status = update.Status;
+                location.OrderNumber = update.OrderNumber;
+            }
+            await InvokeAsync(StateHasChanged);
+        });
+    }
+
+    private IEnumerable<string> GetRows() =>
+    locations.Select(l => l.Row).Distinct().OrderBy(r => r);
+
+    private IEnumerable<StorageLocationView> GetLocationsForRow(string row) =>
+        locations.Where(l => l.Row == row).OrderBy(l => l.Column);
+
+    private string GetSlotClass(StorageLocationView location) => location.Status switch
+    {
+        "Empty" => "slot-empty",
+        "Reserved" => "slot-reserved",
+        "Occupied" => "slot-occupied",
+        _ => ""
+    };
+}

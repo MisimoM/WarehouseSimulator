@@ -32,11 +32,11 @@ public static class DatabaseSeeder
             return;
 
         var locations = new List<StorageLocation>();
-        var rows = new[] { "A", "B", "C", "D" };
+        var rows = new[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q" };
 
         foreach (var row in rows)
         {
-            for (var column = 1; column <= 10; column++)
+            for (var column = 1; column <= 6; column++)
             {
                 locations.Add(StorageLocation.Create(row, column));
             }
