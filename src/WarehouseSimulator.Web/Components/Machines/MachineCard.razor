@@ -4,7 +4,6 @@
 
 <div class="machine-card @GetStatusClass()">
     <div class="machine-header">
-        <span class="machine-icon">⚙️</span>
         <h3>@GetMachineName()</h3>
     </div>
 
@@ -14,13 +13,13 @@
     </div>
 
     <div class="machine-stats">
-        <span>Haverier: @Machine.TotalBreakdowns</span>
+        <span>Breakdowns: @Machine.TotalBreakdowns</span>
     </div>
 
     @if (Machine.Status == MachineStatus.Broken)
     {
         <button class="repair-btn" @onclick="OnRepairClicked">
-            🔧 Laga maskin
+            Repair Machine
         </button>
     }
 </div>

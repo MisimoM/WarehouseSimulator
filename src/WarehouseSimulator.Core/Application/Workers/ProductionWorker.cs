@@ -28,7 +28,7 @@ public class ProductionWorker(
             var machine = await context.Machines
                 .FirstAsync(m => m.Type == MachineType.Production, cancellationToken);
 
-            if (machine.Status != MachineStatus.Running)
+            if (machine.Status is not MachineStatus.Running)
             {
                 logger.LogWarning("Production machine is not running, waiting...");
                 await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1), cancellationToken);
@@ -44,14 +44,14 @@ public class ProductionWorker(
             if (order is null)
             {
                 logger.LogInformation("No pending orders, waiting...");
-                await Task.Delay(1000, cancellationToken);
+                await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1), cancellationToken);
                 continue;
             }
 
             if (belt.Count >= 10)
             {
                 logger.LogWarning("Belt is full, waiting...");
-                await Task.Delay(1000, cancellationToken);
+                await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1), cancellationToken);
                 continue;
             }
 
@@ -63,11 +63,11 @@ public class ProductionWorker(
             context.Products.Add(product);
             await context.SaveChangesAsync(cancellationToken);
 
-            logger.LogInformation("Product created for order {OrderNumber}", order.OrderNumber);
+            logger.LogInformation("Product created for order {DisplayNumber}", order.DisplayNumber);
 
             await belt.Writer.WriteAsync(product, cancellationToken);
 
-            logger.LogInformation("Product placed on belt for order {OrderNumber}", order.OrderNumber);
+            logger.LogInformation("Product placed on belt for order {DisplayNumber}", order.DisplayNumber);
 
             await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1), cancellationToken);
 
