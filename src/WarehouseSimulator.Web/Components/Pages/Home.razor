@@ -2,6 +2,7 @@
 @using WarehouseSimulator.Core.Domain.Machines
 @using WarehouseSimulator.Core.SignalR
 @using WarehouseSimulator.Core.SignalR.Messages
+@using WarehouseSimulator.Web.Components.Belt
 @using WarehouseSimulator.Web.Components.Machines
 @using WarehouseSimulator.Web.Components.StorageLocations
 
@@ -25,6 +26,10 @@
             <h2>Storage rack</h2>
             <StorageRack />
         </div>
+    </div>
+    <div class="belt-section">
+        <h2>Belt</h2>
+        <ConveyorBelt />
     </div>
 </div>
 

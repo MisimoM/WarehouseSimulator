@@ -1,0 +1,52 @@
+﻿@using WarehouseSimulator.Core.SignalR.Messages
+@using WarehouseSimulator.Core.SignalR
+
+@inject WarehouseHubClient HubClient
+
+<div class="conveyor-belt">
+    <h3>Conveyor belt (@beltProducts.Count/10)</h3>
+    <div class="belt-slots">
+        @for (int i = 9; i >= 0; i--)
+        {
+            var product = beltProducts.ElementAtOrDefault(i);
+            <div class="belt-slot @(product != null ? "slot-occupied" : "slot-empty")">
+                @if (product != null)
+                {
+                    <div class="belt-box">
+                        <span>@product.DisplayNumber</span>
+                        <span class="priority @product.Priority.ToLower()">@product.Priority</span>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<BeltProductItem> beltProducts = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        HubClient.On<BeltUpdate>("BeltUpdated", async (update) =>
+        {
+            if (update.IsAdded)
+            {
+                beltProducts.Add(new BeltProductItem(
+                    update.ProductId,
+                    update.OrderNumber!.Value,
+                    update.Priority!
+                ));
+            }
+            else
+            {
+                beltProducts.RemoveAll(p => p.ProductId == update.ProductId);
+            }
+            await InvokeAsync(StateHasChanged);
+        });
+    }
+
+    private record BeltProductItem(Guid ProductId, int OrderNumber, string Priority)
+    {
+        public string DisplayNumber => $"#{OrderNumber:D4}";
+    }
+}

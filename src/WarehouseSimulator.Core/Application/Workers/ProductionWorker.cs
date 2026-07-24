@@ -5,6 +5,7 @@ using WarehouseSimulator.Core.Domain.Machines;
 using WarehouseSimulator.Core.Domain.Machines.Events;
 using WarehouseSimulator.Core.Domain.Orders;
 using WarehouseSimulator.Core.Domain.Products;
+using WarehouseSimulator.Core.Domain.Products.Events;
 using WarehouseSimulator.Core.Domain.Shared;
 using WarehouseSimulator.Core.Domain.Shared.Events;
 using WarehouseSimulator.Core.Infrastructure.Belt;
@@ -64,10 +65,16 @@ public class ProductionWorker(
             await context.SaveChangesAsync(cancellationToken);
 
             logger.LogInformation("Product created for order {DisplayNumber}", order.DisplayNumber);
-
+            
             await belt.Writer.WriteAsync(product, cancellationToken);
 
             logger.LogInformation("Product placed on belt for order {DisplayNumber}", order.DisplayNumber);
+
+            await eventBus.PublishAsync(new ProductPlacedOnBeltEvent(
+                product.Id,
+                order.OrderNumber,
+                product.Priority
+            ));
 
             await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1), cancellationToken);
 

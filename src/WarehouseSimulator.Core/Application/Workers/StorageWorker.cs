@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using WarehouseSimulator.Core.Domain.Machines;
 using WarehouseSimulator.Core.Domain.Machines.Events;
 using WarehouseSimulator.Core.Domain.Orders;
+using WarehouseSimulator.Core.Domain.Products.Events;
 using WarehouseSimulator.Core.Domain.Shared;
 using WarehouseSimulator.Core.Domain.Shared.Events;
 using WarehouseSimulator.Core.Domain.StorageLocations;
@@ -37,6 +38,7 @@ public class StorageWorker(
             }
 
             var product = await belt.Reader.ReadAsync(cancellationToken);
+            await eventBus.PublishAsync(new ProductRemovedFromBeltEvent(product.Id));
 
             var order = await context.Orders.FindAsync(product.OrderId, cancellationToken)
                 ?? throw new InvalidOperationException($"Order not found for product {product.Id}");
