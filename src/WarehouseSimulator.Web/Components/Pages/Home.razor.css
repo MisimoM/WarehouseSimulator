@@ -30,3 +30,9 @@ h2 {
     text-transform: uppercase;
     letter-spacing: 1px;
 }
+
+.belt-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
