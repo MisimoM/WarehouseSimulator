@@ -3,6 +3,6 @@
 public interface ISimulationClock
 {
     DateTime GetCurrentSimulatedTime();
-    int GetRealMillisecondsFromHours(int simulatedHours);
-    int GetRealMillisecondsFromMinutes(int simulatedMinutes);
+    Task Delay(TimeSpan simulatedDuration);
+    Task Delay(TimeSpan simulatedDuration, CancellationToken cancellationToken);
 }

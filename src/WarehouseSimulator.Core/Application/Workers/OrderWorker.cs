@@ -29,7 +29,7 @@ public class OrderWorker(
             logger.LogInformation("Order {DisplayNumber} created with priority {Priority}",
                 order.DisplayNumber, order.Priority);
 
-            await Task.Delay(simulationClock.GetRealMillisecondsFromHours(2), cancellationToken);
+            await simulationClock.Delay(TimeSpan.FromHours(1), cancellationToken);
         }
     }
 }

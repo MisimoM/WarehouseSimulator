@@ -32,7 +32,7 @@ public class ProductionWorker(
             if (machine.Status is not MachineStatus.Running)
             {
                 logger.LogWarning("Production machine is not running, waiting...");
-                await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1), cancellationToken);
+                await simulationClock.Delay(TimeSpan.FromHours(1), cancellationToken);
                 continue;
             }
 
@@ -45,14 +45,14 @@ public class ProductionWorker(
             if (order is null)
             {
                 logger.LogInformation("No pending orders, waiting...");
-                await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1), cancellationToken);
+                await simulationClock.Delay(TimeSpan.FromHours(1), cancellationToken);
                 continue;
             }
 
             if (belt.Count >= 10)
             {
                 logger.LogWarning("Belt is full, waiting...");
-                await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1), cancellationToken);
+                await simulationClock.Delay(TimeSpan.FromHours(1), cancellationToken);
                 continue;
             }
 
@@ -76,7 +76,7 @@ public class ProductionWorker(
                 product.Priority
             ));
 
-            await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1), cancellationToken);
+            await simulationClock.Delay(TimeSpan.FromMinutes(20), cancellationToken);
 
             if (SimulationRandomizer.ShouldBreakDown())
             {

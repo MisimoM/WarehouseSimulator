@@ -2,26 +2,43 @@
 
 namespace WarehouseSimulator.Core.Infrastructure.Simulation;
 
-public class SimulationClock(int secondsPerHour = 6) : ISimulationClock
+public class SimulationClock(int realSecondsPerSimulatedHour = 10) : ISimulationClock
 {
     private readonly DateTime _realStartTime = DateTime.UtcNow;
     private readonly DateTime _simulatedStartTime = DateTime.UtcNow;
-    private readonly int _secondsPerHour = secondsPerHour;
+    private readonly int _realSecondsPerSimulatedHour = realSecondsPerSimulatedHour;
 
     public DateTime GetCurrentSimulatedTime()
     {
         var realElapsed = DateTime.UtcNow - _realStartTime;
-        var simulatedHours = realElapsed.TotalSeconds / _secondsPerHour;
+
+        var simulatedHours = realElapsed.TotalSeconds / _realSecondsPerSimulatedHour;
+
         return _simulatedStartTime.AddHours(simulatedHours);
     }
 
-    public int GetRealMillisecondsFromHours(int simulatedHours)
+    private int GetRealMilliseconds(TimeSpan simulatedDuration)
     {
-        return simulatedHours * _secondsPerHour * 1000;
+        var realMillisecondsPerSimulatedHour = _realSecondsPerSimulatedHour * 1000;
+
+        var millisecondsPerSimulatedHour = TimeSpan.FromHours(1).TotalMilliseconds;
+
+        var multiplier = realMillisecondsPerSimulatedHour / millisecondsPerSimulatedHour;
+
+        return (int)(simulatedDuration.TotalMilliseconds * multiplier);
     }
 
-    public int GetRealMillisecondsFromMinutes(int simulatedMinutes)
+    public Task Delay(TimeSpan simulatedDuration, CancellationToken cancellationToken)
     {
-        return (int)(simulatedMinutes * (_secondsPerHour / 60.0) * 1000);
+        var realMilliseconds = GetRealMilliseconds(simulatedDuration);
+
+        return Task.Delay(realMilliseconds, cancellationToken);
+    }
+
+    public Task Delay(TimeSpan simulatedDuration)
+    {
+        var realMilliseconds = GetRealMilliseconds(simulatedDuration);
+
+        return Task.Delay(realMilliseconds);
     }
 }

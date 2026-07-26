@@ -41,10 +41,11 @@ public class MachineService(
 
         logger.LogInformation("Machine {MachineType} repair started", machine.Type);
 
-        await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1));
+        await simulationClock.Delay(TimeSpan.FromHours(1));
 
         machine.FinishRepair(simulationClock.GetCurrentSimulatedTime());
         await context.SaveChangesAsync();
+        
         await eventBus.PublishAsync(new MachineRepairedEvent(
             machine.Id,
             machine.Type

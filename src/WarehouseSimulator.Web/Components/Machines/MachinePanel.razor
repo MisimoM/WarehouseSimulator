@@ -1,0 +1,20 @@
+﻿@using WarehouseSimulator.Core.Application.Services.Machines
+@using WarehouseSimulator.Web.Components.Machines
+
+@inject IMachineService MachineService
+
+<div class="machine-panel">
+    @foreach (var machine in machines)
+    {
+        <Machine MachineView="@machine" />
+    }
+</div>
+
+@code {
+    private List<MachineView> machines = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        machines = await MachineService.GetMachinesAsync();
+    }
+}

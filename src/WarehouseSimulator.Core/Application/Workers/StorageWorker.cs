@@ -33,12 +33,11 @@ public class StorageWorker(
             if (machine.Status != MachineStatus.Running)
             {
                 logger.LogWarning("Storage machine is not running, waiting...");
-                await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1), cancellationToken);
+                await simulationClock.Delay(TimeSpan.FromHours(1), cancellationToken);
                 continue;
             }
 
             var product = await belt.Reader.ReadAsync(cancellationToken);
-            await eventBus.PublishAsync(new ProductRemovedFromBeltEvent(product.Id));
 
             var order = await context.Orders.FindAsync(product.OrderId, cancellationToken)
                 ?? throw new InvalidOperationException($"Order not found for product {product.Id}");
@@ -51,7 +50,7 @@ public class StorageWorker(
             if (location is null)
             {
                 logger.LogWarning("No empty storage locations available");
-                await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1), cancellationToken);
+                await simulationClock.Delay(TimeSpan.FromHours(1), cancellationToken);
                 continue;
             }
 
@@ -59,7 +58,7 @@ public class StorageWorker(
             product.MarkAsBeingStored();
             await context.SaveChangesAsync(cancellationToken);
 
-            await Task.Delay(simulationClock.GetRealMillisecondsFromMinutes(10), cancellationToken);
+            await simulationClock.Delay(TimeSpan.FromMinutes(5), cancellationToken);
 
             var simulatedTime = simulationClock.GetCurrentSimulatedTime();
             location.Occupy(product.Id);
@@ -71,6 +70,8 @@ public class StorageWorker(
             logger.LogInformation("Product {ProductId} stored at {LocationCode}",
                 product.Id, location.LocationCode);
 
+            await eventBus.PublishAsync(new ProductRemovedFromBeltEvent(product.Id));
+
             await eventBus.PublishAsync(new StorageLocationUpdatedEvent(
                 location.Id,
                 location.Row,
@@ -81,7 +82,7 @@ public class StorageWorker(
                 simulationClock.GetCurrentSimulatedTime()
             ));
 
-            await Task.Delay(simulationClock.GetRealMillisecondsFromHours(1), cancellationToken);
+            await simulationClock.Delay(TimeSpan.FromMinutes(5), cancellationToken);
 
             if (SimulationRandomizer.ShouldBreakDown())
             {

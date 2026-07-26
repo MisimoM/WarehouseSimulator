@@ -1,0 +1,68 @@
+﻿@using WarehouseSimulator.Core.Application.Services.Machines
+@using WarehouseSimulator.Core.Domain.Machines
+@using WarehouseSimulator.Core.SignalR
+@using WarehouseSimulator.Core.SignalR.Messages
+
+@inject IMachineService MachineService
+@inject WarehouseHubClient HubClient
+
+<div class="machine-card @GetStatusClass()">
+    <div class="machine-header">
+        <h3>@GetMachineName()</h3>
+    </div>
+
+    <div class="machine-status">
+        <span class="status-indicator"></span>
+        <span>@MachineView.Status</span>
+    </div>
+
+    <div class="machine-stats">
+        <span>Breakdowns: @MachineView.TotalBreakdowns</span>
+    </div>
+
+    @if (MachineView.Status == MachineStatus.Broken)
+    {
+        <button class="repair-btn" @onclick="OnRepairClicked">
+            Repair Machine
+        </button>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public MachineView MachineView { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        HubClient.On<MachineStatusUpdate>("MachineStatusUpdated", async (update) =>
+        {
+            if (update.MachineId == MachineView.Id)
+            {
+                MachineView.Status = Enum.Parse<MachineStatus>(update.Status);
+                if (update.TotalBreakdowns.HasValue)
+                    MachineView.TotalBreakdowns = update.TotalBreakdowns.Value;
+                await InvokeAsync(StateHasChanged);
+            }
+        });
+    }
+
+    private async Task OnRepairClicked()
+    {
+        await MachineService.RepairMachineAsync(MachineView.Id);
+    }
+
+    private string GetStatusClass() => MachineView.Status switch
+    {
+        MachineStatus.Running => "status-running",
+        MachineStatus.Broken => "status-broken",
+        MachineStatus.Repairing => "status-repairing",
+        _ => ""
+    };
+
+    private string GetMachineName() => MachineView.Type switch
+    {
+        MachineType.Production => "Production Machine",
+        MachineType.Storage => "Storage Machine",
+        _ => "Unknown machine"
+    };
+}
