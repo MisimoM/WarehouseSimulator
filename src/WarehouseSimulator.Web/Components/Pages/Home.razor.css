@@ -11,6 +11,10 @@
     align-items: start;
 }
 
+.dashboard-header {
+    display: flex;
+}
+
 h2 {
     font-size: 1rem;
     font-weight: 600;

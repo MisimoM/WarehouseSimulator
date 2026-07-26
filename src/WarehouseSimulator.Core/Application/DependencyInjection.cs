@@ -20,6 +20,7 @@ public static class DependencyInjection
         services.AddHostedService<OrderWorker>();
         services.AddHostedService<ProductionWorker>();
         services.AddHostedService<StorageWorker>();
+        services.AddHostedService<ClockWorker>();
 
         // Event handlers
         services.AddScoped<IEventHandler<MachineBreakdownEvent>, MachineBreakdownHandler>();

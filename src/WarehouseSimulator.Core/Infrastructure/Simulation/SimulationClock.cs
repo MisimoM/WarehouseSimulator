@@ -5,7 +5,7 @@ namespace WarehouseSimulator.Core.Infrastructure.Simulation;
 public class SimulationClock(int realSecondsPerSimulatedHour = 10) : ISimulationClock
 {
     private readonly DateTime _realStartTime = DateTime.UtcNow;
-    private readonly DateTime _simulatedStartTime = DateTime.UtcNow;
+    private readonly DateTime _simulatedStartTime = new DateTime(2026, 1, 1, 6, 0, 0, DateTimeKind.Utc);
     private readonly int _realSecondsPerSimulatedHour = realSecondsPerSimulatedHour;
 
     public DateTime GetCurrentSimulatedTime()

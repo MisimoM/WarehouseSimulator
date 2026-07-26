@@ -1,6 +1,7 @@
 ﻿@using WarehouseSimulator.Core.Application.Services.Machines
 @using WarehouseSimulator.Core.SignalR
 @using WarehouseSimulator.Web.Components.Belt
+@using WarehouseSimulator.Web.Components.Clock
 @using WarehouseSimulator.Web.Components.Machines
 @using WarehouseSimulator.Web.Components.StorageLocations
 
@@ -10,6 +11,9 @@
 @rendermode InteractiveServer
 
 <div class="dashboard">
+    <div class="dashboard-header">
+        <WarehouseClock />
+    </div>
     <div class="dashboard-top">
         <div class="machine-section">
             <h2>Machines</h2>

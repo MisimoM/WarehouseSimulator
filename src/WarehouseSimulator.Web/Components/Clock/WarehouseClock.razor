@@ -1,0 +1,32 @@
+﻿@using WarehouseSimulator.Core.Domain.Shared
+@using WarehouseSimulator.Core.SignalR.Messages
+@using WarehouseSimulator.Core.SignalR
+
+@inject ISimulationClock SimulationClock
+@inject WarehouseHubClient HubClient
+@implements IDisposable
+
+<div class="warehouse-clock">
+    <span class="sim-day">Day @day</span>
+    <span class="sim-separator">|</span>
+    <span class="sim-time">@time</span>
+</div>
+
+@code {
+    private int day = 1;
+    private string time = "06:00";
+    private static readonly DateTime StartDate = new DateTime(2026, 1, 1, 6, 0, 0, DateTimeKind.Utc);
+
+    protected override void OnInitialized()
+    {
+        HubClient.On<ClockUpdate>("ClockUpdated", async (update) =>
+        {
+            day = (int)(update.SimulatedTime - StartDate).TotalDays + 1;
+            var roundedMinutes = (update.SimulatedTime.Minute / 30) * 30;
+            time = $"{update.SimulatedTime.Hour:D2}:{roundedMinutes:D2}";
+            await InvokeAsync(StateHasChanged);
+        });
+    }
+
+    public void Dispose() { }
+}
