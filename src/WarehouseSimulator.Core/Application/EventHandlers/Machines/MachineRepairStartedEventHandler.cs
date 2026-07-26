@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WarehouseSimulator.Core.Domain.Machines;
 using WarehouseSimulator.Core.Domain.Machines.Events;
 using WarehouseSimulator.Core.Domain.Shared.Events;

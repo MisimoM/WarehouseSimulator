@@ -1,6 +1,4 @@
-﻿using WarehouseSimulator.Core.Domain.Machines;
-
-namespace WarehouseSimulator.Core.Application.Services.Machines;
+﻿namespace WarehouseSimulator.Core.Application.Services.Machines;
 
 public interface IMachineService
 {
