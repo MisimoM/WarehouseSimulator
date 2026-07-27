@@ -20,14 +20,15 @@ public class OrderWorker(
             await using var context = await dbContextFactory.CreateDbContextAsync(cancellationToken);
 
             var priority = SimulationRandomizer.GetOrderPriority();
+            var region = SimulationRandomizer.GetRandomRegion();
             var simulatedTime = simulationClock.GetCurrentSimulatedTime();
-            var order = Order.Create(priority, simulatedTime);
+            var order = Order.Create(priority, region, simulatedTime);
 
             await context.Orders.AddAsync(order, cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
 
-            logger.LogInformation("Order {DisplayNumber} created with priority {Priority}",
-                order.DisplayNumber, order.Priority);
+            logger.LogInformation("Order {DisplayNumber} created with priority {Priority} and region {Region}",
+                order.DisplayNumber, order.Priority, order.Region);
 
             await simulationClock.Delay(TimeSpan.FromHours(1), cancellationToken);
         }
