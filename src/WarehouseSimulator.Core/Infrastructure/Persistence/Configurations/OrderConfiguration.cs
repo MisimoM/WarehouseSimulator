@@ -26,7 +26,14 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
             .IsRequired();
 
         builder.Property(o => o.DeliveryDeadline).IsRequired();
+        builder.Property(o => o.DeliveredAt);
 
         builder.Property(o => o.CreatedAt).IsRequired();
+
+        builder.HasOne(o => o.Truck)
+            .WithMany()
+            .HasForeignKey(o => o.TruckId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

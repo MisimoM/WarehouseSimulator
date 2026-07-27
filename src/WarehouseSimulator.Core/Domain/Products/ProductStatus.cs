@@ -4,5 +4,8 @@ public enum ProductStatus
 {
     OnBelt,
     BeingStored,
-    InStorage
+    InStorage,
+    BeingPicked,
+    OnTruck,
+    Delivered
 }

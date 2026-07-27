@@ -1,4 +1,4 @@
-﻿namespace WarehouseSimulator.Core.Domain.Orders;
+﻿namespace WarehouseSimulator.Core.Domain.Shared;
 
 public enum DeliveryRegion
 {
