@@ -21,8 +21,12 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
             .HasConversion<string>()
             .IsRequired();
 
-        builder.Property(o => o.CreatedAt).IsRequired();
+        builder.Property(o => o.Region)
+            .HasConversion<string>()
+            .IsRequired();
 
-        builder.Property(o => o.SimulatedCreatedAt).IsRequired();
+        builder.Property(o => o.DeliveryDeadline).IsRequired();
+
+        builder.Property(o => o.CreatedAt).IsRequired();
     }
 }

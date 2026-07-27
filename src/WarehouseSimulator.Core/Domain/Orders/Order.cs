@@ -8,22 +8,28 @@ public class Order
     public int OrderNumber { get; private set; }
     public Priority Priority { get; private set; }
     public OrderStatus Status { get; private set; }
+    public DeliveryRegion Region { get; private set; }
+    public DateTime DeliveryDeadline { get; private set; }
     public DateTime CreatedAt { get; private set; }
-    public DateTime SimulatedCreatedAt { get; private set; }
 
     public string DisplayNumber => $"#{OrderNumber:D4}";
 
     private Order() { }
 
-    public static Order Create(Priority priority, DateTime simulatedTime)
+    public static Order Create(Priority priority, DeliveryRegion region, DateTime simulatedTime)
     {
+        var deliveryDeadline = priority == Priority.Express
+        ? simulatedTime.AddDays(1)
+        : simulatedTime.AddDays(3);
+
         return new Order
         {
             Id = Guid.NewGuid(),
             Priority = priority,
+            Region = region,
             Status = OrderStatus.Pending,
-            CreatedAt = DateTime.UtcNow,
-            SimulatedCreatedAt = simulatedTime
+            DeliveryDeadline = deliveryDeadline,
+            CreatedAt = simulatedTime
         };
     }
 

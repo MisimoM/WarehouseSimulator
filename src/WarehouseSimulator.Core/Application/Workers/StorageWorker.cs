@@ -37,7 +37,10 @@ public class StorageWorker(
                 continue;
             }
 
-            var product = await belt.Reader.ReadAsync(cancellationToken);
+            var productFromBelt = await belt.Reader.ReadAsync(cancellationToken);
+
+            var product = await context.Products.FindAsync(productFromBelt.Id, cancellationToken)
+                ?? throw new InvalidOperationException($"Product not found: {productFromBelt.Id}");
 
             var order = await context.Orders.FindAsync(product.OrderId, cancellationToken)
                 ?? throw new InvalidOperationException($"Order not found for product {product.Id}");

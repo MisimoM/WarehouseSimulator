@@ -1,4 +1,5 @@
-﻿using WarehouseSimulator.Core.Domain.Shared;
+﻿using WarehouseSimulator.Core.Domain.Orders;
+using WarehouseSimulator.Core.Domain.Shared;
 
 namespace WarehouseSimulator.Core.Application.Workers;
 
@@ -14,5 +15,10 @@ public class SimulationRandomizer
         return Random.Shared.Next(0, 100) < chancePercent
             ? Priority.Express
             : Priority.Standard;
+    }
+
+    public static DeliveryRegion GetRandomRegion()
+    {
+        return (DeliveryRegion)Random.Shared.Next(0, 3);
     }
 }
