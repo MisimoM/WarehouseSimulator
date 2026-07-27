@@ -1,4 +1,5 @@
 ﻿using WarehouseSimulator.Core.Domain.Shared;
+using WarehouseSimulator.Core.Domain.Trucks;
 
 namespace WarehouseSimulator.Core.Domain.Orders;
 
@@ -10,7 +11,11 @@ public class Order
     public OrderStatus Status { get; private set; }
     public DeliveryRegion Region { get; private set; }
     public DateTime DeliveryDeadline { get; private set; }
+    public DateTime? DeliveredAt { get; private set; }
     public DateTime CreatedAt { get; private set; }
+    public int? TruckId { get; private set; }
+
+    public Truck? Truck { get; private set; }
 
     public string DisplayNumber => $"#{OrderNumber:D4}";
 
@@ -19,8 +24,8 @@ public class Order
     public static Order Create(Priority priority, DeliveryRegion region, DateTime simulatedTime)
     {
         var deliveryDeadline = priority == Priority.Express
-        ? simulatedTime.AddDays(1)
-        : simulatedTime.AddDays(3);
+            ? simulatedTime.AddDays(1)
+            : simulatedTime.AddDays(3);
 
         return new Order
         {
@@ -37,5 +42,19 @@ public class Order
     {
         Status = status;
     }
-}
 
+    public void AssignToTruck(int truckId)
+    {
+        TruckId = truckId;
+        Status = OrderStatus.OnTruck;
+    }
+
+    public void Deliver(DateTime simulatedTime)
+    {
+        if (Status is not OrderStatus.OnTruck)
+            throw new InvalidOperationException("Order must be on truck to be delivered.");
+
+        Status = OrderStatus.Delivered;
+        DeliveredAt = simulatedTime;
+    }
+}

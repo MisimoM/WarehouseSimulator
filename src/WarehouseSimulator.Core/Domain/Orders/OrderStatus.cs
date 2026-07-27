@@ -4,5 +4,7 @@ public enum OrderStatus
 {
     Pending,
     InProduction,
-    InStorage
+    InStorage,
+    OnTruck,
+    Delivered
 }

@@ -22,10 +22,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .IsRequired();
 
         builder.Property(p => p.ProducedAt).IsRequired();
-        builder.Property(p => p.SimulatedProducedAt).IsRequired();
 
         builder.Property(p => p.StoredAt);
-        builder.Property(p => p.SimulatedStoredAt);
+        builder.Property(p => p.PickedAt);
 
         builder.HasOne(p => p.Order)
             .WithOne()

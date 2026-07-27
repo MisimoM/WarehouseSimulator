@@ -4,6 +4,7 @@ using WarehouseSimulator.Core.Domain.Notifications;
 using WarehouseSimulator.Core.Domain.Orders;
 using WarehouseSimulator.Core.Domain.Products;
 using WarehouseSimulator.Core.Domain.StorageLocations;
+using WarehouseSimulator.Core.Domain.Trucks;
 
 namespace WarehouseSimulator.Core.Infrastructure.Persistence;
 
@@ -14,6 +15,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<StorageLocation> StorageLocations { get; set; }
     public DbSet<Machine> Machines { get; set; }
     public DbSet<Notification> Notifications { get; set; }
+    public DbSet<Truck> Trucks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
