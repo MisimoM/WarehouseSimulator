@@ -1,4 +1,6 @@
-﻿namespace WarehouseSimulator.Core.SignalR.Messages;
+﻿using WarehouseSimulator.Core.Domain.Shared;
+
+namespace WarehouseSimulator.Core.SignalR.Messages;
 
 public record StorageLocationUpdate(
     int LocationId,
@@ -6,5 +8,6 @@ public record StorageLocationUpdate(
     int Column,
     string Status,
     Guid? ProductId,
-    string? OrderNumber
+    string? OrderNumber,
+    string? Priority
 );

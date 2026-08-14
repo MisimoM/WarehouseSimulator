@@ -82,6 +82,7 @@ public class StorageWorker(
                 location.Status,
                 product.Id,
                 order.DisplayNumber,
+                order.Priority,
                 simulationClock.GetCurrentSimulatedTime()
             ));
 

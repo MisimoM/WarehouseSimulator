@@ -1,4 +1,5 @@
-﻿using WarehouseSimulator.Core.Domain.Shared.Events;
+﻿using WarehouseSimulator.Core.Domain.Shared;
+using WarehouseSimulator.Core.Domain.Shared.Events;
 
 namespace WarehouseSimulator.Core.Domain.StorageLocations.Events;
 
@@ -10,6 +11,7 @@ public class StorageLocationUpdatedEvent : IDomainEvent
     public StorageLocationStatus Status { get; }
     public Guid? ProductId { get; }
     public string? OrderNumber { get; }
+    public Priority? Priority { get; }
     public DateTime OccurredAt { get; }
     public DateTime SimulatedOccurredAt { get; }
 
@@ -20,6 +22,7 @@ public class StorageLocationUpdatedEvent : IDomainEvent
         StorageLocationStatus status,
         Guid? productId,
         string? orderNumber,
+        Priority? priority,
         DateTime simulatedTime)
     {
         LocationId = locationId;
@@ -28,6 +31,7 @@ public class StorageLocationUpdatedEvent : IDomainEvent
         Status = status;
         ProductId = productId;
         OrderNumber = orderNumber;
+        Priority = priority;
         OccurredAt = DateTime.UtcNow;
         SimulatedOccurredAt = simulatedTime;
     }

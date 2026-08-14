@@ -7,6 +7,7 @@ public class StorageLocationView
     public int Column { get; set; }
     public string Status { get; set; } = null!;
     public string? OrderNumber { get; set; }
+    public string? Priority { get; set; }
 
     public string LocationCode => $"{Row}{Column}";
 }
