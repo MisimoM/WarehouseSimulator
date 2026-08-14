@@ -12,12 +12,13 @@
             <div class="rack-column">
                 @foreach (var location in GetLocationsForRow(row))
                 {
+                    <span class="location-code">@location.LocationCode</span>
                     <div class="rack-slot @GetSlotClass(location)">
-                        <span class="location-code">@location.LocationCode</span>
                         @if (location.Status == "Occupied")
                         {
                             <div class="storage-box">
                                 <span>@location.OrderNumber</span>
+                                <span class="priority @location.Priority?.ToLower()">@location.Priority</span>
                             </div>
                         }
                     </div>
@@ -41,6 +42,7 @@
             {
                 location.Status = update.Status;
                 location.OrderNumber = update.OrderNumber;
+                location.Priority = update.Priority;
             }
             await InvokeAsync(StateHasChanged);
         });

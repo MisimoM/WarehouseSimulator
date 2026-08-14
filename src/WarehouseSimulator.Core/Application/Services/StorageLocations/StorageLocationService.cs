@@ -9,13 +9,15 @@ public class StorageLocationService(IDbContextFactory<ApplicationDbContext> dbCo
     {
         await using var context = await dbContextFactory.CreateDbContextAsync();
         return await context.StorageLocations
+            .Include(s => s.Product)
             .Select(s => new StorageLocationView
             {
                 Id = s.Id,
                 Row = s.Row,
                 Column = s.Column,
                 Status = s.Status.ToString(),
-                OrderNumber = s.Product != null ? s.Product.Order.DisplayNumber : null
+                OrderNumber = s.Product != null ? s.Product.Order.DisplayNumber : null,
+                Priority = s.Product != null ? s.Product.Priority.ToString() : null
             })
             .ToListAsync();
     }

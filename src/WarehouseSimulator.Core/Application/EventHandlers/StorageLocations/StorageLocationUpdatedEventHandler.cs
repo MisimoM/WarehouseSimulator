@@ -16,7 +16,8 @@ public class StorageLocationUpdatedEventHandler(IHubContext<WarehouseHub> hub) :
             @event.Column,
             @event.Status.ToString(),
             @event.ProductId,
-            @event.OrderNumber
+            @event.OrderNumber,
+            @event.Priority.ToString()
         ));
     }
 }
