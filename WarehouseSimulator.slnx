@@ -7,4 +7,7 @@
     <Project Path="src/WarehouseSimulator.Core/WarehouseSimulator.Core.csproj" Id="6cbad28e-cb0f-490b-8f24-e6576bf41367" />
     <Project Path="src/WarehouseSimulator.Web/WarehouseSimulator.Web.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/WarehouseSimulator.Tests/WarehouseSimulator.Tests.csproj" Id="9e825b97-8b84-4771-9d4f-e2ec3219650b" />
+  </Folder>
 </Solution>
